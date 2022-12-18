@@ -6,6 +6,7 @@ import axios from "axios";
 function App() {
   const [word, setWord] = useState();
   const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState(false);
   const [entry, setEntry] = useState([]);
 
   const inputRef = useRef(null);
@@ -19,13 +20,18 @@ function App() {
     axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
     .then(resp => {
 			console.log('entry data', resp.data)
+      setError(false)
       setEntry(resp.data[0])
 		})
 		.catch(e => {
-			console.error("error", e)
-      setErrorMsg("Can't find that word!")
+      if (error.response || error.request) {
+        setErrorMsg("There appears to be a problem. Please try again later!")
+      } else {
+          setError(true)
+          setErrorMsg("Can't find that word!")
+      }
 		})
-  }, [word]);
+  }, [word, error]);
 
   return (
     <div className="App">
@@ -33,19 +39,18 @@ function App() {
           <input type="text" name="word" id="word" ref={inputRef}  />
           <button type='submit' onClick={handleClick}>Look it up</button>
         </form>
-        {entry.word &&
+        {entry.word && entry.word !== "undefined" && !error &&
         <>
-        <p>{entry.word !== "undefined" && entry?.word}</p>
-        <p>{entry.word !== "undefined" && entry?.phonetic}</p>
-        {entry.word !== "undefined" && entry?.meanings?.map((meaning,i)=> <p key={i}>{meaning.partOfSpeech}</p>)}
-        {entry.word !== "undefined" && entry?.meanings
-          .map((meaning,i)=> <div key={i}>{meaning.definitions.map((def,index)=><p key={index}>{def.definition}</p>)}</div>)}
+        <p>{entry?.word}</p>
+        <p>{entry?.phonetic}</p>
+        {entry?.meanings?.map((meaning,i)=> <p key={i}>{meaning.partOfSpeech}</p>)}
+        {entry?.meanings.map((meaning,i)=> <div key={i}>{meaning.definitions.map((def,index)=><p key={index}>{def.definition}</p>)}</div>)}
           </>
         }
-        {entry.word === "undefined" &&
+        {entry.word === "undefined" && !error &&
           <p>Enter a word!</p>
         }
-        {errorMsg && !entry.word &&
+        {error && 
           <p>{errorMsg}</p>
         }
     </div>
