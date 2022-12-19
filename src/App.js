@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import axios from "axios";
+import NeoBrutalistButton from './NeoBrutalistButton';
 
 
 function App() {
@@ -35,24 +36,35 @@ function App() {
 
   return (
     <div className="App">
-        <form>
-          <input type="text" name="word" id="word" ref={inputRef}  />
-          <button type='submit' onClick={handleClick}>Look it up</button>
-        </form>
-        {entry.word && entry.word !== "undefined" && !error &&
-        <>
-        <p>{entry?.word}</p>
-        <p>{entry?.phonetic}</p>
-        {entry?.meanings?.map((meaning,i)=> <p key={i}>{meaning.partOfSpeech}</p>)}
-        {entry?.meanings.map((meaning,i)=> <div key={i}>{meaning.definitions.map((def,index)=><p key={index}>{def.definition}</p>)}</div>)}
-          </>
-        }
-        {entry.word === "undefined" && !error &&
-          <p>Enter a word!</p>
-        }
-        {error && 
-          <p>{errorMsg}</p>
-        }
+      <h1 className="text-4xl my-10 font-bold">Online Dictionary!</h1>
+      <form className="flex justify-center mb-8">
+        <input type="text" name="word" id="word" placeholder="Look it up" ref={inputRef} className="border-b-4 border-white bg-black mr-8 pl-4"  />
+        <NeoBrutalistButton type='submit' id="submit" onClick={handleClick} label="Look it up" />
+      </form>
+      <section className="sm:w-3/6 m-auto">
+      {entry.word && entry.word !== "undefined" && !error &&
+        <div className="font-sans-serif text-left flex items-center flex-col">
+       
+          <h2 className="text-3xl font-bold">{entry?.word}</h2>
+          <h3 className="text-xl">{entry?.phonetic}</h3>
+          <ul className="text-lg">
+            {entry?.meanings?.map((meaning,i)=> 
+            <li key={i} className="mb-4">
+              <div className='text-xl'>{meaning.partOfSpeech} </div>
+              <ol className="list-decimal ml-8">
+                {meaning.definitions.map((def,index)=><li key={index}>{def.definition}</li>)}
+              </ol>
+              </li>
+              )}
+          </ul>
+          
+        </div>
+      }
+      
+      {error && 
+        <p>{errorMsg}</p>
+      }
+      </section>
     </div>
   );
 }
