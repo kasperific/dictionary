@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import './App.css';
 import axios from "axios";
 import NeoBrutalistButton from './NeoBrutalistButton';
 
@@ -35,8 +34,8 @@ function App() {
   }, [word, error]);
 
   return (
-    <div className="App">
       <h1 className="text-4xl my-10 font-bold">Online Dictionary!</h1>
+    <div className="text-center">
       <form className="flex justify-center mb-8">
         <input type="text" name="word" id="word" placeholder="Look it up" ref={inputRef} className="border-b-4 border-white bg-black mr-8 pl-4"  />
         <NeoBrutalistButton type='submit' id="submit" onClick={handleClick} label="Look it up" />
