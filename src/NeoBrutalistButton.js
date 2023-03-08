@@ -8,17 +8,21 @@ const ref = useRef(null);
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  const [border, setBorder] = useState(0);
   const [clicked, setClicked] = useState(false);
 
 
   useLayoutEffect(() => {
+    // Get the dimensions of the element
     setTimeout(() => {
       setWidth(ref.current.offsetWidth);
       setHeight(ref.current.offsetHeight);
+      //  We only want to count the border once, so we need halve the border width 
+      setBorder((ref.current.offsetWidth - ref.current.clientWidth) / 2)
     }, 500);
-    console.log("width",width);
-    console.log("height",height)
-    let shadowD = Math.sqrt((width * width) + (height * height)) - 4;
+    //  The shadow's width should equal the hypotenuse of the element
+    let shadowD = Math.sqrt((width * width) + (height * height)) - border;
+    // Apply the calculated dimensions to the shadow element
     const shadowElem = document.querySelector("#buttonShadow");
     shadowElem.style.width = shadowD + "px";
     shadowElem.style.height = shadowD + "px";
@@ -26,13 +30,10 @@ const ref = useRef(null);
 
   function handleMouseUp() {
     setClicked(false)
-    console.log("clicked?",clicked)
   }
 
   function handleMouseDown() {
     setClicked(true)
-    console.log("clicked?",clicked)
-
   }
 
   return (
@@ -42,9 +43,9 @@ const ref = useRef(null);
         id="submit" 
         ref={ref} 
         onMouseDown={handleMouseDown}
-        onTouchEnd={handleMouseDown}  
+        onTouchStart={handleMouseDown} 
         onMouseUp={handleMouseUp}
-        onTouchStart={handleMouseUp} 
+        onTouchEnd={handleMouseUp}  
         className={classNames("relative border-4 border-white bg-black m-2 p-4 transition",
           {"left-2 top-2": clicked},
           {"-left-2 -top-2": !clicked}

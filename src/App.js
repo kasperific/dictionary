@@ -37,7 +37,7 @@ function App() {
     <div className="text-center">
       <h1 className="text-4xl my-10 font-bold">Online Dictionary!</h1>
       <form className="flex justify-center mb-8">
-        <input type="text" name="word" id="word" placeholder="Look it up" ref={inputRef} className="border-b-4 border-white bg-black mr-8 pl-4"  />
+        <input type="text" name="word" id="word" placeholder="Enter a word" ref={inputRef} className="border-b-4 border-white bg-black mr-8 pl-4"  />
         <NeoBrutalistButton type='submit' id="submit" onClick={handleClick} label="Look it up" />
       </form>
       <section className="sm:w-3/6 m-auto">
