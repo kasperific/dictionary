@@ -26,7 +26,7 @@ const ref = useRef(null);
     const shadowElem = document.querySelector("#buttonShadow");
     shadowElem.style.width = shadowD + "px";
     shadowElem.style.height = shadowD + "px";
-  }, [height, width]);
+  }, [border, height, width]);
 
   function handleMouseUp() {
     setClicked(false)
